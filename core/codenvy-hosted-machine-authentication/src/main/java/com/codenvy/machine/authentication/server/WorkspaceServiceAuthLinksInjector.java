@@ -62,11 +62,10 @@ public class WorkspaceServiceAuthLinksInjector extends WorkspaceServiceLinksInje
     private final HttpJsonRequestFactory httpJsonRequestFactory;
 
     @Inject
-    public WorkspaceServiceAuthLinksInjector(@Named("che.ide.context") String ideContext,
-                                             @Named("api.endpoint") String apiEndpoint,
+    public WorkspaceServiceAuthLinksInjector(@Named("api.endpoint") String apiEndpoint,
                                              HttpJsonRequestFactory httpJsonRequestFactory,
                                              MachineServiceLinksInjector machineLinksInjector) {
-        super(ideContext, machineLinksInjector);
+        super(machineLinksInjector);
         this.tokenServiceBaseUrl = apiEndpoint + MACHINE_SERVICE_PATH;
         this.httpJsonRequestFactory = httpJsonRequestFactory;
     }

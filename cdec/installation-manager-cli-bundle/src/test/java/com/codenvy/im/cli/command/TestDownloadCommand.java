@@ -198,7 +198,7 @@ public class TestDownloadCommand extends AbstractTestCommand {
         CommandInvoker.Result result = commandInvoker.invoke();
 
         String output = result.disableAnsi().getOutputStream();
-        assertTrue(output.startsWith("This CLI client was out-dated so automatic update has being started. It will be finished at the next launch.\n"));
+        assertTrue(output.startsWith("The Codenvy CLI is out of date. We are doing an automatic update. Relaunch.\n"));
 
         verify(spyCommand.facade).startDownload(imArtifact, versionToUpdate);
         verify(spyCommand.facade).waitForInstallStepCompleted(stepId);

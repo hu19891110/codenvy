@@ -30,12 +30,13 @@ executeSshCommand "sed -i 's|export CODENVY_IM_BASE=/home/vagrant/.*||' ~/.bashr
 executeSshCommand "sed -i 's|\$CODENVY_IM_BASE/cli/bin|/home/vagrant/codenvy-im/codenvy-cli/bin|' ~/.bashrc &> /dev/null"
 
 # test auto-update at the start of executing some command
-executeIMCommand "im-version"
+executeIMCommand "version"
 validateExpectedString ".*This.CLI.client.was.out-dated.so.automatic.update.has.being.started\..It.will.be.finished.at.the.next.launch.*"
+# TODO next message is for the version 4.5.0
+# validateExpectedString ".*The.Codenvy.CLI.is.out.of.date\..We.are.doing.an.automatic.update\..Relaunch.*"
 
-executeIMCommand "im-version"
+executeIMCommand "version"
 validateExpectedString ".*Installation.Manager.CLI.is.being.updated.\.\.\..*"
-validateExpectedString ".*Files.from.the.'/home/vagrant/codenvy-im-data'.directory.are.being.moved.into.the.'/home/vagrant/codenvy-im'.directory\.\..*"
 executeSshCommand --valid-exit-code=1 "test -d /home/vagrant/codenvy-im-data"
 executeSshCommand "test -d /home/vagrant/codenvy-im/updates"
 

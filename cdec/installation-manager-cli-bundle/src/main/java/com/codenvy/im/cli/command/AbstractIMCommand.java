@@ -139,7 +139,7 @@ public abstract class AbstractIMCommand extends AbsCommand {
                 return;
             }
 
-            console.println("This CLI client was out-dated so automatic update has being started. It will be finished at the next launch.\n");
+            console.println("The Codenvy CLI is out of date. We are doing an automatic update. Relaunch.\n");
             console.exit(0);
 
         } catch (Exception e) {

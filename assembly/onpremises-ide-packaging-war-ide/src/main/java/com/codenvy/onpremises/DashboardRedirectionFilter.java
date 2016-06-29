@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 @Singleton
 public class DashboardRedirectionFilter implements Filter {
-    private static Pattern projectPattern = Pattern.compile("^/ws/[^/]+?/.+");
+    private static Pattern projectPattern = Pattern.compile("^/[^/]+?/.+");
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
