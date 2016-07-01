@@ -25,7 +25,6 @@ import javax.naming.ldap.InitialLdapContext;
 import java.util.Collection;
 
 import static com.codenvy.api.dao.ldap.LdapCloser.close;
-import static com.codenvy.api.dao.ldap.LdapCloser.deferClose;
 
 /**
  * @author Yevhenii Voevodin

@@ -56,7 +56,6 @@ public class LdapTckModule extends TckModule {
         bind(ProfileAttributesMapper.class).toInstance(new ProfileAttributesMapper("dc=codenvy;dc=com",
                                                                                    "uid",
                                                                                    "uid",
-                                                                                   "mail",
                                                                                    allowedAttributes));
 
         bind(new TypeLiteral<TckRepository<UserImpl>>() {}).to(UserTckRepository.class);

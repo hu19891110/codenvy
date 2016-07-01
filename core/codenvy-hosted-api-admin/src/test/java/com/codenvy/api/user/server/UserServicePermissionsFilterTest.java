@@ -21,7 +21,7 @@ import org.eclipse.che.api.core.ForbiddenException;
 import org.eclipse.che.api.core.rest.ApiExceptionMapper;
 import org.eclipse.che.api.user.server.UserManager;
 import org.eclipse.che.api.user.server.UserService;
-import org.eclipse.che.api.user.shared.dto.UserDescriptor;
+import org.eclipse.che.api.user.shared.dto.UserDto;
 import org.eclipse.che.api.workspace.server.WorkspaceManager;
 import org.eclipse.che.commons.env.EnvironmentContext;
 import org.eclipse.che.commons.subject.Subject;
@@ -102,10 +102,10 @@ public class UserServicePermissionsFilterTest {
 
     @Test
     public void shouldCheckPermissionsOnUserCreationFromEntity() throws Exception {
-        final UserDescriptor userToCreate = DtoFactory.newDto(UserDescriptor.class)
-                                                      .withId("user123")
-                                                      .withEmail("test @test.com")
-                                                      .withPassword("***");
+        final UserDto userToCreate = DtoFactory.newDto(UserDto.class)
+                                               .withId("user123")
+                                               .withEmail("test @test.com")
+                                               .withPassword("***");
 
         final Response response = given().auth()
                                          .basic(ADMIN_USER_NAME, ADMIN_USER_PASSWORD)

@@ -108,16 +108,9 @@ public class LdapUserDao implements UserDao {
             final String principal = formatDn(userDn, user.getId());
             try (CloseableSupplier<InitialLdapContext> ignored = wrapCloseable(contextFactory.createContext(principal, password))) {
                 return user;
-            } catch (AuthenticationException e) {
-                //if first time authentication failed, try to rename user entity
-                doGetById(user.getId());
-                //retry authentication
-                try (CloseableSupplier<InitialLdapContext> ignored = wrapCloseable(contextFactory.createContext(principal, password))) {
-                    return user;
-                } catch (AuthenticationException e2) {
-                    throw new NotFoundException(format("User '%s' doesn't exist", principal));
-                }
             }
+        } catch (AuthenticationException x) {
+            throw new NotFoundException(format("User '%s' doesn't exist", alias));
         } catch (NamingException e) {
             throw new ServerException(format("Error during authentication of user '%s'", alias), e);
         }
@@ -288,19 +281,7 @@ public class LdapUserDao implements UserDao {
             //try to find user using dn
             return context.getAttributes(formatDn(userDn, id));
         } catch (NameNotFoundException nfEx) {
-            //if not found -> try to find user using old dn
-            try {
-                final Attributes attributes = context.getAttributes(formatDn(oldUserDn, id));
-
-                //if attributes were found then rename current entity
-                final String fromDnVal = attributes.get(oldUserDn).get().toString();
-                final String toDnVal = attributes.get(userDn).get().toString();
-                context.rename(formatDn(oldUserDn, fromDnVal), formatDn(userDn, toDnVal));
-
-                return attributes;
-            } catch (NameNotFoundException nfEx2) {
-                return null;
-            }
+            return null;
         }
     }
 

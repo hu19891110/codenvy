@@ -49,7 +49,6 @@ public class ProfileAttributesMapper {
     final String              profileDn;
     final String              profileIdAttr;
     final String              profileContainerDn;
-    final String              profileEmailAttr;
     final Map<String, String> allowedAttributes;
 
     /**
@@ -84,12 +83,10 @@ public class ProfileAttributesMapper {
     public ProfileAttributesMapper(@Named("profile.ldap.profile_container_dn") String profileContainerDn,
                                    @Named("profile.ldap.profile_dn") String profileDn,
                                    @Named("profile.ldap.attr.id") String profileIdAttr,
-                                   @Named("profile.ldap.attr.email") String profileEmailAttr,
                                    @Named("profile.ldap.allowed_attributes") Pair<String, String>[] allowedAttributes) {
         this.profileDn = profileDn;
         this.profileIdAttr = profileIdAttr;
         this.profileContainerDn = profileContainerDn;
-        this.profileEmailAttr = profileEmailAttr;
         this.allowedAttributes = new HashMap<>();
         for (Pair<String, String> pair : allowedAttributes) {
             this.allowedAttributes.put(pair.first, pair.second);
@@ -98,8 +95,7 @@ public class ProfileAttributesMapper {
 
     public ProfileImpl asProfile(Attributes attributes) throws NamingException {
         final String id = attributes.get(profileIdAttr).get().toString();
-        final String email = attributes.get(profileEmailAttr).get().toString();
-        return new ProfileImpl(id, email, asMap(attributes.getAll()));
+        return new ProfileImpl(id, asMap(attributes.getAll()));
     }
 
     public String getProfileDn(String id) {

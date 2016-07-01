@@ -31,7 +31,6 @@ import javax.naming.directory.ModificationItem;
 import javax.naming.ldap.InitialLdapContext;
 
 
-import static com.codenvy.api.dao.ldap.LdapCloser.deferClose;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 

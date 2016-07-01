@@ -57,8 +57,8 @@ public class ProfileTckRepository extends AbstractLdapTckRepository<ProfileImpl>
         // Profile dao modifies user records so it is needed to create users before creating profiles
         userTckRepository.createAll(profiles.stream()
                                             .map(profile -> new UserImpl(profile.getUserId(),
-                                                                         profile.getEmail(),
-                                                                         profile.getEmail(),
+                                                                         profile.getUserId() + "@codenvy.com",
+                                                                         profile.getUserId(),
                                                                          "password",
                                                                          Collections.emptyList()))
                                             .collect(toList()));

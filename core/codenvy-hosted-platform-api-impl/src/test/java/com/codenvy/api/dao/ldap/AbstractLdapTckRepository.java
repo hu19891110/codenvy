@@ -28,7 +28,7 @@ import javax.naming.ldap.InitialLdapContext;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenvy.api.dao.ldap.LdapCloser.deferClose;
+import static com.codenvy.api.dao.ldap.LdapCloser.wrapCloseable;
 
 public abstract class AbstractLdapTckRepository<T> implements TckRepository<T> {
 
@@ -50,7 +50,7 @@ public abstract class AbstractLdapTckRepository<T> implements TckRepository<T> {
     @Override
     public void removeAll() throws TckRepositoryException {
         for (String id : getAllIds()) {
-            try (CloseableSupplier<InitialLdapContext> contextSup = LdapCloser.wrapCloseable(contextFactory.createContext())) {
+            try (CloseableSupplier<InitialLdapContext> contextSup = wrapCloseable(contextFactory.createContext())) {
                 contextSup.get().destroySubcontext(normalizeDn(id));
             } catch (NamingException x) {
                 throw new TckRepositoryException(x.getMessage(), x);
@@ -64,14 +64,14 @@ public abstract class AbstractLdapTckRepository<T> implements TckRepository<T> {
 
     private List<String> getAllIds() throws TckRepositoryException {
         final List<String> result = new LinkedList<>();
-        try (CloseableSupplier<InitialLdapContext> contextSup = LdapCloser.wrapCloseable(contextFactory.createContext())) {
+        try (CloseableSupplier<InitialLdapContext> contextSup = wrapCloseable(contextFactory.createContext())) {
             // Configure search controls
             final SearchControls controls = new SearchControls();
             controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
             controls.setReturningAttributes(new String[] {dn});
 
             // Search the entities
-            try (CloseableSupplier<NamingEnumeration<SearchResult>> enumSup = wrapAutoCloseable(
+            try (CloseableSupplier<NamingEnumeration<SearchResult>> enumSup = wrapCloseable(
                     contextSup.get().search(containerDn, "(objectClass=" + objectClass[0] + ')', controls))) {
                 final NamingEnumeration<SearchResult> searchRes = enumSup.get();
                 while (searchRes.hasMore()) {

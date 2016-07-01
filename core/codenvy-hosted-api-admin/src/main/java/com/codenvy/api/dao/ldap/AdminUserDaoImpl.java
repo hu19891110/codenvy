@@ -54,14 +54,12 @@ public class AdminUserDaoImpl extends LdapUserDao implements AdminUserDao {
     public AdminUserDaoImpl(InitialLdapContextFactory contextFactory,
                             @Named("user.ldap.user_container_dn") String userContainerDn,
                             @Named("user.ldap.user_dn") String userDn,
-                            @Named("user.ldap.old_user_dn") String oldUserDn,
                             UserAttributesMapper userAttributesMapper,
                             EventService eventService,
                             UserLdapPagination userLdapPagination) {
         super(contextFactory,
               userContainerDn,
               userDn,
-              oldUserDn,
               userAttributesMapper,
               eventService);
         this.userLdapPagination = userLdapPagination;

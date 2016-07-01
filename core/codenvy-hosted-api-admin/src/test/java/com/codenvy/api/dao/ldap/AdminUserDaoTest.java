@@ -57,7 +57,6 @@ public class AdminUserDaoTest extends BaseTest {
         userDao = new AdminUserDaoImpl(factory,
                                        "dc=codenvy;dc=com",
                                        "uid",
-                                       "cn",
                                        mapper,
                                        new EventService(),
                                        userLdapPagination);

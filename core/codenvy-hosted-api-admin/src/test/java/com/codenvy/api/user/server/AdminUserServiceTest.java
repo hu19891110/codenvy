@@ -19,8 +19,11 @@ import com.jayway.restassured.response.Response;
 
 import org.eclipse.che.api.core.Page;
 import org.eclipse.che.api.core.ServerException;
+import org.eclipse.che.api.core.model.user.User;
 import org.eclipse.che.api.core.rest.ApiExceptionMapper;
 import org.eclipse.che.api.core.rest.shared.dto.ServiceError;
+import org.eclipse.che.api.user.server.model.impl.UserImpl;
+import org.eclipse.che.api.user.shared.dto.UserDto;
 import org.eclipse.che.dto.server.DtoFactory;
 import org.everrest.assured.EverrestJetty;
 import org.everrest.core.impl.EnvironmentContext;
@@ -70,7 +73,7 @@ public class AdminUserServiceTest {
 
     @Test
     public void shouldReturnAllUsers() throws Exception {
-        User testUser = new User().withId("test_id").withEmail("test@email");
+        UserImpl testUser = new UserImpl("test_id", "test@email", "name");
         when(userDao.getAll(anyInt(), anyInt())).thenReturn(new Page<>(singletonList(testUser), 0, 1, 1));
 
         final Response response = given().auth()
@@ -81,9 +84,9 @@ public class AdminUserServiceTest {
         assertEquals(response.getStatusCode(), OK.getStatusCode());
         verify(userDao).getAll(3, 4);
 
-        List<UserDescriptor> users = DtoFactory.getInstance().createListDtoFromJson(response.getBody().print(), UserDescriptor.class);
+        List<UserDto> users = DtoFactory.getInstance().createListDtoFromJson(response.getBody().print(), UserDto.class);
         assertEquals(users.size(), 1);
-        final UserDescriptor fetchedUser = users.get(0);
+        final UserDto fetchedUser = users.get(0);
         assertEquals(fetchedUser.getId(), testUser.getId());
         assertEquals(fetchedUser.getEmail(), testUser.getEmail());
     }

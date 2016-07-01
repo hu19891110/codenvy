@@ -20,8 +20,8 @@ import com.jayway.restassured.response.Response;
 import org.eclipse.che.api.core.ForbiddenException;
 import org.eclipse.che.api.core.rest.ApiExceptionMapper;
 import org.eclipse.che.api.core.rest.shared.dto.ServiceError;
+import org.eclipse.che.api.user.server.ProfileService;
 import org.eclipse.che.api.user.server.UserManager;
-import org.eclipse.che.api.user.server.UserProfileService;
 import org.eclipse.che.api.workspace.server.WorkspaceManager;
 import org.eclipse.che.commons.env.EnvironmentContext;
 import org.eclipse.che.commons.subject.Subject;
@@ -41,8 +41,6 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.everrest.assured.JettyHttpServer.ADMIN_USER_NAME;
 import static org.everrest.assured.JettyHttpServer.ADMIN_USER_PASSWORD;
 import static org.everrest.assured.JettyHttpServer.SECURE_PATH;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -71,7 +69,7 @@ public class UserProfileServicePermissionsFilterTest {
     private static Subject subject;
 
     @Mock
-    UserProfileService service;
+    ProfileService service;
 
     @BeforeMethod
     public void setUp() {
@@ -87,7 +85,6 @@ public class UserProfileServicePermissionsFilterTest {
                                          .post(SECURE_PATH + "/profile/user123");
 
         assertEquals(response.getStatusCode(), 204);
-        verify(service).update(eq("user123"), anyObject());
         verify(subject).checkPermission(SystemDomain.DOMAIN_ID, null, MANAGE_USERS_ACTION);
     }
 
