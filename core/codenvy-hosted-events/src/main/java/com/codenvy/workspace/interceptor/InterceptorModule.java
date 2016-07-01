@@ -14,7 +14,6 @@
  */
 package com.codenvy.workspace.interceptor;
 
-import com.codenvy.auth.sso.server.organization.UserCreator;
 import com.codenvy.user.interceptor.CreateUserInterceptor;
 import com.codenvy.user.interceptor.UserCreatorInterceptor;
 import com.google.inject.AbstractModule;

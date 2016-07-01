@@ -20,6 +20,8 @@ import com.jayway.restassured.specification.RequestSpecification;
 import org.eclipse.che.api.core.ForbiddenException;
 import org.eclipse.che.api.core.rest.ApiExceptionMapper;
 import org.eclipse.che.api.core.rest.shared.dto.ServiceError;
+import org.eclipse.che.api.user.server.UserManager;
+import org.eclipse.che.api.user.server.model.impl.UserImpl;
 import org.eclipse.che.api.workspace.server.WorkspaceManager;
 import org.eclipse.che.api.workspace.server.WorkspaceService;
 import org.eclipse.che.api.workspace.server.model.impl.WorkspaceImpl;
@@ -240,6 +242,9 @@ public class WorkspacePermissionsFilterTest {
     @Test
     public void shouldCheckPermissionsOnGetWorkspaceByUserNameAndWorkspaceName() throws Exception {
         when(subject.hasPermission("workspace", "workspace123", "read")).thenReturn(true);
+        UserImpl storedUser = mock(UserImpl.class);
+        when(storedUser.getId()).thenReturn("user123");
+        when(userManager.getByName("userok")).thenReturn(storedUser);
 
         WorkspaceImpl workspace = mock(WorkspaceImpl.class);
         when(workspace.getId()).thenReturn("workspace123");

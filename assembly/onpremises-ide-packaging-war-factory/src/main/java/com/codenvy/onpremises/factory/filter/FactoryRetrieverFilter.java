@@ -19,7 +19,7 @@ import org.eclipse.che.api.core.rest.HttpJsonRequestFactory;
 import org.eclipse.che.api.factory.server.FactoryService;
 import org.eclipse.che.api.factory.shared.dto.Factory;
 import org.eclipse.che.api.user.server.UserService;
-import org.eclipse.che.api.user.shared.dto.UserDescriptor;
+import org.eclipse.che.api.user.shared.dto.UserDto;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -98,10 +98,10 @@ public class FactoryRetrieverFilter implements Filter {
                 final String getUserByNameUrl = fromUri(apiEndPoint).path(UserService.class)
                                                                     .path(UserService.class, "getByName")
                                                                     .build(httpReq.getParameter("user")).toString();
-                final UserDescriptor user = httpRequestFactory.fromUrl(getUserByNameUrl)
+                final UserDto user = httpRequestFactory.fromUrl(getUserByNameUrl)
                                                               .setMethod("GET")
                                                               .request()
-                                                              .asDto(UserDescriptor.class);
+                                                              .asDto(UserDto.class);
                 final List<Factory> matchedFactories = httpRequestFactory.fromUrl(getFactoryUrl)
                                                                          .setMethod("GET")
                                                                          .addQueryParam("name", httpReq.getParameter("name"))

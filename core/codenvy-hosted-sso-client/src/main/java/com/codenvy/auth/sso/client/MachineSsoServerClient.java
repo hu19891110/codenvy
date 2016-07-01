@@ -18,6 +18,7 @@ import com.codenvy.machine.authentication.server.MachineTokenRegistry;
 import com.google.common.collect.ImmutableSet;
 
 import org.eclipse.che.api.core.ApiException;
+import org.eclipse.che.api.core.model.user.User;
 import org.eclipse.che.api.core.rest.HttpJsonRequestFactory;
 import org.eclipse.che.api.user.server.UserManager;
 import org.eclipse.che.commons.subject.Subject;
@@ -62,6 +63,8 @@ public class MachineSsoServerClient extends HttpSsoServerClient {
             return super.getSubject(token, clientUrl);
         }
         try {
+            final User user = userManager.getById(tokenRegistry.getUserId(token));
+            return new SubjectImpl(user.getName(), user.getId(), token, false);
             final org.eclipse.che.api.user.server.dao.User user = userManager.getById(tokenRegistry.getUserId(token));
             return new SubjectImpl(user.getName(), user.getId(), token, false);
         } catch (ApiException x) {

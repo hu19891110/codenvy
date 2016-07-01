@@ -16,7 +16,7 @@ package com.codenvy.api.dao.ldap;
 
 import com.google.common.base.Strings;
 
-import org.eclipse.che.api.user.server.dao.Profile;
+import org.eclipse.che.api.user.server.model.impl.ProfileImpl;
 import org.eclipse.che.commons.lang.Pair;
 
 import javax.inject.Inject;
@@ -39,17 +39,18 @@ import static javax.naming.directory.DirContext.REMOVE_ATTRIBUTE;
 import static javax.naming.directory.DirContext.REPLACE_ATTRIBUTE;
 
 /**
- * Mapper is used for mapping LDAP Attributes to {@link Profile}.
+ * Mapper is used for mapping LDAP Attributes to {@link ProfileImpl}.
  *
  * @author Eugene Voevodin
  */
 @Singleton
 public class ProfileAttributesMapper {
 
-    private final String              profileDn;
-    private final String              profileIdAttr;
-    private final String              profileContainerDn;
-    private final Map<String, String> allowedAttributes;
+    final String              profileDn;
+    final String              profileIdAttr;
+    final String              profileContainerDn;
+    final String              profileEmailAttr;
+    final Map<String, String> allowedAttributes;
 
     /**
      * Creates new instance of {@link ProfileAttributesMapper}
@@ -83,21 +84,22 @@ public class ProfileAttributesMapper {
     public ProfileAttributesMapper(@Named("profile.ldap.profile_container_dn") String profileContainerDn,
                                    @Named("profile.ldap.profile_dn") String profileDn,
                                    @Named("profile.ldap.attr.id") String profileIdAttr,
+                                   @Named("profile.ldap.attr.email") String profileEmailAttr,
                                    @Named("profile.ldap.allowed_attributes") Pair<String, String>[] allowedAttributes) {
         this.profileDn = profileDn;
         this.profileIdAttr = profileIdAttr;
         this.profileContainerDn = profileContainerDn;
+        this.profileEmailAttr = profileEmailAttr;
         this.allowedAttributes = new HashMap<>();
         for (Pair<String, String> pair : allowedAttributes) {
             this.allowedAttributes.put(pair.first, pair.second);
         }
     }
 
-    public Profile asProfile(Attributes attributes) throws NamingException {
+    public ProfileImpl asProfile(Attributes attributes) throws NamingException {
         final String id = attributes.get(profileIdAttr).get().toString();
-        return new Profile().withId(id)
-                            .withUserId(id)
-                            .withAttributes(asMap(attributes.getAll()));
+        final String email = attributes.get(profileEmailAttr).get().toString();
+        return new ProfileImpl(id, email, asMap(attributes.getAll()));
     }
 
     public String getProfileDn(String id) {
